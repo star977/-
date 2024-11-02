@@ -1,5 +1,7 @@
 package com.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
@@ -106,6 +108,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
         PageResult pageResult = new PageResult(total, records);
         return pageResult;
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        lambdaUpdate()
+                .eq(Employee::getId, id)
+                .set(Employee::getStatus, status)
+                .update();
     }
 
 }
