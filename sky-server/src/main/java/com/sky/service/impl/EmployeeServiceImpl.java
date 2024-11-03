@@ -118,4 +118,16 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
                 .update();
     }
 
+    @Override
+    public void updateemployee(EmployeeDTO employeeDTO) {
+        lambdaUpdate()
+                .eq(Employee::getId, employeeDTO.getId())
+                .set(Employee::getUsername, employeeDTO.getUsername())
+                .set(Employee::getName, employeeDTO.getName())
+                .set(Employee::getPhone, employeeDTO.getPhone())
+                .set(Employee::getSex, employeeDTO.getSex())
+                .set(Employee::getIdNumber, employeeDTO.getIdNumber())
+                .update();
+    }
+
 }
