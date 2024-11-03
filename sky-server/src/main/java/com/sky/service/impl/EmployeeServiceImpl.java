@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
@@ -14,6 +15,7 @@ import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.enumeration.OperationType;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
@@ -72,6 +74,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
      * 新增员工
      * @param employeeDTO
      */
+    @AutoFill(value = OperationType.INSERT)
     public void save(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         //对象属性拷贝
@@ -110,14 +113,18 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return pageResult;
     }
 
+    @AutoFill(value = OperationType.UPDATE)
     @Override
     public void startOrStop(Integer status, Long id) {
         lambdaUpdate()
                 .eq(Employee::getId, id)
                 .set(Employee::getStatus, status)
+                .set(Employee::getUpdateTime, LocalDateTime.now())
+                .set(Employee::getUpdateUser, BaseContext.getCurrentId())
                 .update();
     }
 
+    @AutoFill(value = OperationType.UPDATE)
     @Override
     public void updateemployee(EmployeeDTO employeeDTO) {
         lambdaUpdate()
@@ -127,6 +134,8 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
                 .set(Employee::getPhone, employeeDTO.getPhone())
                 .set(Employee::getSex, employeeDTO.getSex())
                 .set(Employee::getIdNumber, employeeDTO.getIdNumber())
+                .set(Employee::getUpdateTime, LocalDateTime.now())
+                .set(Employee::getUpdateUser, BaseContext.getCurrentId())
                 .update();
     }
 
